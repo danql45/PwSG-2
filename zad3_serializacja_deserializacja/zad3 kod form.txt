@@ -1,0 +1,341 @@
+using System;
+using System.Drawing;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+
+namespace lab20200302
+{
+    public partial class Form1 : Form
+    {
+        //serializacja
+        public Dane dane = new Dane();
+        private Color k, k1, k2, k3, k4, k5, k6, k7, k8, k9;
+        private int a, r, g, b, sum, kolor, avg;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox1.Load(openFileDialog1.FileName);
+                dane.szer = pictureBox1.Image.Width;
+                dane.wys = pictureBox1.Image.Height;
+                pictureBox2.Image = new Bitmap(dane.szer, dane.wys);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+
+            for (int x = 0; x < dane.szer; x++)
+            {
+                for (int y = 0; y < dane.wys; y++)
+                {
+                    k = b1.GetPixel(x, y);
+                    b2.SetPixel(x, y, Color.FromArgb(k.B, k.G, k.R));
+                }
+            }
+            pictureBox2.Refresh();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            
+            for (int x = 0; x < dane.szer; x++)
+            {
+                for (int y = 0; y < dane.wys; y++)
+                {
+                    k = b1.GetPixel(x, y);
+                    b2.SetPixel(x, y, Color.FromArgb(k.G, k.R, k.B));
+                }
+            }
+            pictureBox2.Refresh();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            
+            for (int x = 0; x < dane.szer; x++)
+            {
+                for (int y = 0; y < dane.wys; y++)
+                {
+                    k = b1.GetPixel(x, y);
+                    b2.SetPixel(x, y, Color.FromArgb(k.R, k.B, k.G));
+                }
+            }
+            pictureBox2.Refresh();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            
+            for (int x = 0; x < dane.szer; x++)
+            {
+                for (int y = 0; y < dane.wys; y++)
+                {
+                    k = b2.GetPixel(x, y);
+                    b1.SetPixel(x, y, Color.FromArgb(k.R, k.G, k.B));
+                }
+            }
+            pictureBox1.Refresh();
+        }
+
+
+        //**************************************************************************   Daniel Dmitruk 78272
+        //MONOCHROMATYZACJA - średnia arytmetyczna (button szary-1)
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            
+            for (int x = 0; x < dane.szer; x++)
+            {
+                for (int y = 0; y < dane.wys; y++)
+                {
+                    //pobieranie wartosci pixela
+                    k = b1.GetPixel(x, y);
+
+                    //wyciaganie wartosci dla ARGB
+                    a = k.A;
+                    r = k.R;
+                    g = k.G;
+                    b = k.B;
+
+                    //znajdowanie sredniej(arytmetycznej)
+                    avg = (r + g + b) / 3;
+
+                    //ustawianie nowych wartosci dla pixeli
+                    b2.SetPixel(x, y, Color.FromArgb(a, avg, avg, avg));
+                }
+            }
+            pictureBox2.Refresh();
+
+
+        }
+
+        //średnia wazona 2 metoda (button szary-2)
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+ 
+            for (int x = 0; x < dane.szer; x++)
+            {
+                for (int y = 0; y < dane.wys; y++)
+                {
+                    //pobieranie wartosci pixela
+                    k = b1.GetPixel(x, y);
+
+                    //wyciaganie wartosci dla ARGB
+                    a = k.A;
+                    r = k.R;
+                    g = k.G;
+                    b = k.B;
+
+                    //znajdowanie sredniej (ważonej)
+                    avg = (int)((r * 0.3) + (g * 0.59) + (b * 0.11));
+
+                    //ustawianie nowych wartosci dla pixeli
+                    b2.SetPixel(x, y, Color.FromArgb(a, avg, avg, avg));
+                }
+            }
+            pictureBox2.Refresh();
+        }
+
+
+
+
+
+        //Progowanie
+        private void button9_Click(object sender, EventArgs e)
+        {
+            //przekazanie wartosci z numericUpDown1 oraz numericUpDown2 do zmiennej
+            dane.prog1 = Convert.ToInt32(numericUpDown1.Value);
+            dane.prog2 = Convert.ToInt32(numericUpDown2.Value);
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+
+            for (int x = 0; x < dane.szer; x++)
+            {
+                for (int y = 0; y < dane.wys; y++)
+                {
+                    //pobieranie wartosci pixela
+                    k = b1.GetPixel(x, y);
+
+                    //wyciaganie wartosci dla ARGB
+                    a = k.A;
+                    r = k.R;
+                    g = k.G;
+                    b = k.B;
+
+                    //znajdowanie sredniej(arytmetycznej)
+                    avg = (r + g + b) / 3;
+
+                    if (avg < dane.prog1)
+                    {
+                        //czarny
+                        kolor = 0;
+                    }
+                    else if (avg < dane.prog2)
+                    {
+                        //szary
+                        kolor = 128;
+                    }
+                    else
+                    {
+                        //biały
+                        kolor = 255;
+                    }
+
+                    //ustawianie nowych wartosci dla pixeli
+                    b2.SetPixel(x, y, Color.FromArgb(a, kolor, kolor, kolor));
+                }
+            }
+            pictureBox2.Refresh();
+
+        }
+
+        //maska 3x3
+        private void button11_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+
+            dane.m1 = Convert.ToInt32(numericUpDown3.Value);
+            dane.m2 = Convert.ToInt32(numericUpDown4.Value);
+            dane.m3 = Convert.ToInt32(numericUpDown5.Value);
+            dane.m4 = Convert.ToInt32(numericUpDown6.Value);
+            dane.m5 = Convert.ToInt32(numericUpDown7.Value);
+            dane.m6 = Convert.ToInt32(numericUpDown8.Value);
+            dane.m7 = Convert.ToInt32(numericUpDown9.Value);
+            dane.m8 = Convert.ToInt32(numericUpDown10.Value);
+            dane.m9 = Convert.ToInt32(numericUpDown11.Value);
+            sum = dane.sumMaski();
+
+            //odcinam krawędzie
+            for (int x = 1; x < dane.szer-1; x++)
+            {
+                for (int y = 1; y < dane.wys-1; y++)
+                {
+                    //pobieranie wartości pixela dla maski 3x3
+                    k1 = b1.GetPixel(x - 1, y - 1);
+                    k2 = b1.GetPixel(x, y - 1);
+                    k3 = b1.GetPixel(x + 1, y - 1);
+                    k4 = b1.GetPixel(x - 1, y);
+                    k5 = b1.GetPixel(x, y);
+                    k6 = b1.GetPixel(x + 1, y);
+                    k7 = b1.GetPixel(x - 1, y + 1);
+                    k8 = b1.GetPixel(x, y + 1);
+                    k9 = b1.GetPixel(x + 1, y + 1);
+
+                    r = k1.R * dane.m1 + k2.R * dane.m2 + k3.R * dane.m3 + k4.R * dane.m4 + k5.R * dane.m5 + k6.R * dane.m6 + k7.R * dane.m7 + k8.R * dane.m8 + k9.R * dane.m9;
+                    g = k1.G * dane.m1 + k2.G * dane.m2 + k3.G * dane.m3 + k4.G * dane.m4 + k5.G * dane.m5 + k6.G * dane.m6 + k7.G * dane.m7 + k8.G * dane.m8 + k9.G * dane.m9;
+                    b = k1.B * dane.m1 + k2.B * dane.m2 + k3.B * dane.m3 + k4.B * dane.m4 + k5.B * dane.m5 + k6.B * dane.m6 + k7.B * dane.m7 + k8.B * dane.m8 + k9.B * dane.m9;
+
+                    //normowanie
+                    if (sum != 0) r /= sum;
+                    if (sum != 0) g /= sum;
+                    if (sum != 0) b /= sum;
+
+                    //obcinanie
+                    if (r > 255) r = 255;
+                    if (r < 0) r = 0;
+                    if (g > 255) g = 255;
+                    if (g < 0) g = 0;
+                    if (b > 255) b = 255;
+                    if (b < 0) b = 0;
+
+
+                    //ustawianie nowych wartosci dla pixeli
+                    b2.SetPixel(x, y, Color.FromArgb(r, g, b));
+                }
+            }
+            pictureBox2.Refresh();
+        }
+
+        private void Form1_FormClosed_1(object sender, FormClosedEventArgs e)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            StreamWriter sw = new StreamWriter(@"C:\Users\danql\Documents\Visual Studio 2019\C# Programy\photoshopdd\lab20200302\bin\Debug\dane.xml");
+            try
+            {
+                XmlSerializer xs = new XmlSerializer(typeof(Dane));
+                xs.Serialize(sw, dane);
+                sw.Close();
+
+                FileStream picture = new FileStream("picture.png", FileMode.Create);
+                bf.Serialize(picture, pictureBox1.Image);
+                picture.Close();
+            }
+            catch (Exception err)
+            {
+                Text = err.ToString();
+                MessageBox.Show(err.ToString());
+            }
+            finally
+            {
+                sw.Close();
+            }
+        }
+
+        //przed wyswietlanie formularza poraz pierwszy
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            StreamReader sr = new StreamReader(@"C:\Users\danql\Documents\Visual Studio 2019\C# Programy\photoshopdd\lab20200302\bin\Debug\dane.xml");
+            try
+            {
+                XmlSerializer xs = new XmlSerializer(typeof(Dane));
+                dane = (Dane)xs.Deserialize(sr);
+                numericUpDown1.Value = dane.prog1;
+                numericUpDown2.Value = dane.prog2;
+                numericUpDown3.Value = dane.m1;
+                numericUpDown4.Value = dane.m2;
+                numericUpDown5.Value = dane.m3;
+                numericUpDown6.Value = dane.m4;
+                numericUpDown7.Value = dane.m5;
+                numericUpDown8.Value = dane.m6;
+                numericUpDown9.Value = dane.m7;
+                numericUpDown10.Value = dane.m8;
+                numericUpDown11.Value = dane.m9;
+                pictureBox2.Image = new Bitmap(dane.szer, dane.wys);
+
+                FileStream picture = new FileStream("picture.png", FileMode.Open);
+                pictureBox1.Image = (Image)bf.Deserialize(picture);
+                picture.Close();
+            }
+            catch(Exception err)
+            {
+                Text = err.ToString();
+                MessageBox.Show(err.ToString());
+            }
+            finally
+            {
+                sr.Close();
+            }
+        }
+    }
+}
