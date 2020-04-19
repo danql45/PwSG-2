@@ -9,13 +9,13 @@
     flex-direction: column;
 }
 
-#kodzikzad2{
+#kodzikzad2, #kodzikzad3, #kodzikzad4, #kodzikzad5{
     width: 80%;
     height: 500px;
     margin-bottom: 0;
     margin-top: 2%;
 }
-#kodzikzad3{
+/* #kodzikzad3{
     width: 80%;
     height: 460px;
     margin-bottom: 0;
@@ -26,7 +26,7 @@
     height: 460px;
     margin-bottom: 0;
     margin-top: 2%;
-}
+} */
 
 #div-1, #div-2, #div-3, #div-4, #div-4, #div-5, #div-6, #div-7, #div-8{
     display: flex;
@@ -59,7 +59,7 @@
     margin-right: 10%;
 }
 
-#div-11, #div-12{
+#div-11, #div-12, #div-14{
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -71,8 +71,17 @@
     
 }
 
+#div-13{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    margin-left: 30%;
+    margin-right: 30%;
+}
+
 .video-fluid {
     width: 50%;
     height: auto;
   }
-
