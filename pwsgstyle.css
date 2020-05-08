@@ -9,7 +9,8 @@
     flex-direction: column;
 }
 
-#kodzikzad2, #kodzikzad3, #kodzikzad4, #kodzikzad5, #kodzikzad6, #kodzikzad7, #kodzikzad8, #kodzikzad9{
+#kodzikzad2, #kodzikzad3, #kodzikzad4, #kodzikzad5, #kodzikzad6, #kodzikzad7, #kodzikzad8, #kodzikzad9, #kodzikzad10, #kodzikzad11
+#kodzikzad12, #kodzikzad13, #kodzikzad14, #kodzikzad15, #kodzikzad16, #kodzikzad17, #kodzikzad18, #kodzikzad19{
     width: 80%;
     height: 500px;
     margin-bottom: 0;
@@ -43,7 +44,7 @@
     background-color: rgb(182, 96, 15);
 }
 
-#div-9{
+#div-9, #div-23{
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -59,7 +60,7 @@
     margin-right: 10%;
 }
 
-#div-11, #div-12, #div-14, #div-15, #div-16, #div-17, #div-18{
+#div-11, #div-12, #div-14, #div-15, #div-16, #div-17, #div-18, #div-20, #div-21, #div-24, #div-25, #div-26, #div-27, #div-28, #div-29, #div-30{
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -85,3 +86,13 @@
     width: 50%;
     height: auto;
   }
+
+#div-22{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    margin-left: 33%;
+    margin-right: 33%;
+}
