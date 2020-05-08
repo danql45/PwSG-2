@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace graWZycie
+{
+    class GFX
+    {
+        private static Graphics gObject;
+
+        public GFX(Graphics g)
+        {
+            gObject = g;
+            setUpCanvas();
+        }
+
+        static int lines = 100;
+
+        public void changeLines(int l)
+        {
+            lines = l;
+        }
+
+        public int getLines()
+        {
+            return lines;
+        }
+        public void setUpCanvas()
+        {
+            Pen myPen = new Pen(Color.DarkGray);
+            Brush myBrush = new SolidBrush(Color.Black);
+            myPen.Width = 1;
+            float xLine = 0f;
+            float yLine = 0f;
+            float xSpace = (900 / lines);
+            float ySpace = (900 / lines);
+            //pionowe
+            for (int i = 0; i < lines + 1; i++)
+            {
+                gObject.DrawLine(myPen, xLine, yLine, xLine, ySpace * lines);
+                xLine += xSpace;
+            }
+            //poziome
+            xLine = 0f;
+            for (int i = 0; i < lines + 1; i++)
+            {
+                gObject.DrawLine(myPen, xLine, yLine, xSpace * lines, yLine);
+                yLine += ySpace;
+            }
+        }
+
+        public static void drawRect1(Rectangle r)
+        {
+            gObject.FillRectangle(Brushes.DarkRed, r);
+        }
+
+        public static void drawRect2(Rectangle r)
+        {
+            gObject.FillRectangle(Brushes.SlateGray, r);
+        }
+    }
+}

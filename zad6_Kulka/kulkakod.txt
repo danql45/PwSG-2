@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace kulka
+{
+    public partial class Form1 : Form
+    {
+        Kulka k1 = new Kulka(30,4, Random(700),0);
+
+        //losowanie pozycji kulki przy starcie programu
+        private static int Random(int v)
+        {
+            Random r = new Random();
+            int losowa = r.Next(v);
+            return losowa;
+        }
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            //Doublebuffer aby zapobiec miganiu kulki, nie daje w tym przypadku zamierzonego efektu
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
+            this.UpdateStyles();
+
+            timer1.Interval = 10;
+
+        }
+
+        //po zastosowaniu CreateParams migotanie kulki zostalo zredukowane
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;
+                return cp;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (timer1.Enabled && button1.Text == "Stop")
+            {
+                timer1.Stop();
+                button1.Text = "Start";
+
+            }
+            else
+            {
+                timer1.Start();
+                button1.Text = "Stop";
+                przesuniecieX = k1.Predkosc;
+                przesuniecieY = k1.Predkosc;
+            }
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.FillEllipse(Brushes.DeepPink, k1.PolozenieX, k1.PolozenieY, k1.Promien * 2, k1.Promien * 2);
+        }
+
+        private int przesuniecieX;
+        private int przesuniecieY;
+        private void PrzesunKulke(object sender, EventArgs e)
+        {
+            //zmienianie wspolrzednych obiektu przy uzyciu timer tick
+            k1.PolozenieX += przesuniecieX;
+            if (k1.PolozenieX < 0 || k1.PolozenieX + k1.Promien * 2 > panel2.Width)
+            {
+                przesuniecieX = -przesuniecieX;
+            }
+
+            k1.PolozenieY += przesuniecieY;
+            if (k1.PolozenieY < 0 || k1.PolozenieY + k1.Promien * 2 > panel2.Height)
+            {
+                przesuniecieY = -przesuniecieY;
+            }
+
+            //aktualizacja rysowanego obiektu
+            this.Invalidate();
+        }
+    }
+}

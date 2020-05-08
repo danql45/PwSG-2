@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace KulkaV2
+{
+    abstract class Figura
+    {
+        protected int x, y, vx, vy, r;
+        protected SolidBrush b;
+
+        public Figura(int ax, int ay, int avx, int avy, int ar, Color ak)
+        {
+            x = ax;
+            y = ay;
+            vx = avx;
+            vy = avy;
+            r = ar;
+            b = new SolidBrush(ak);
+        }
+        abstract public void rysuj(Graphics g);
+
+        public void porusz(int szer, int wys)
+        {
+            x += vx;
+            if (x >= szer - r || x <= r) vx = -vx;
+
+            y += vy;
+            if (y >= wys - r || y <= r) vy = -vy;
+        }
+    }
+}

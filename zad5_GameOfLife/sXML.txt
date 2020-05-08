@@ -1,0 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
+
+namespace graWZycie
+{
+    public class sXML
+    {
+        public int SIZE { get; set; }
+        public int rectSize { get; set; }
+
+        public int lines { get; set; }
+
+        public int size { get; set; }
+
+        public int ticks { get; set; }
+
+        public int boardSize { get; set; }
+
+        public string boardString { get; set; }
+    }
+}

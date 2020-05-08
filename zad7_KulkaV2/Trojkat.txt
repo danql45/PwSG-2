@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace KulkaV2
+{
+    class Trojkat : Figura
+    {
+        public Trojkat(int ax, int ay, int avx, int avy, int ar, Color ak) : base(ax, ay, avx, avy, ar, ak)
+        {
+        }
+        override
+        public void rysuj(Graphics g)
+        {
+            Point[] p = { new Point(x , y - r), new Point(x - r, y + r), new Point(x + r, y + r) };
+            g.FillPolygon(b, p);
+        }
+    }
+}

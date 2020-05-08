@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace KulkaV2
+{
+    class Kwadrat : Figura
+    {
+
+        public Kwadrat(int ax, int ay, int avx, int avy, int ar, Color ak):base(ax, ay, avx, avy, ar, ak)
+        {
+
+        }
+        override
+        public void rysuj(Graphics g)
+        {
+            g.FillRectangle(b, x - r, y - r, 2 * r, 2 * r);
+        }
+    }
+}
