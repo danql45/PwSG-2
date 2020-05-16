@@ -1,0 +1,98 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using t3d;
+using punkt;
+
+
+namespace lab20200512
+{
+    public partial class Form1 : Form
+    {
+        private double r = 10, fi = 45, teta = 60;
+        private Color k = Color.Yellow;
+        private int rotacja = 1;
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if(rotacja == 1) fi += 1;  // zmiana kierunku obrotu figury
+            else fi -= 1;
+
+            if (fi >= 360) fi -= 360;
+            mojPanel1.Invalidate();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (timer1.Enabled && button1.Text == "Stop")
+            {
+                timer1.Stop();
+                button1.Text = "Start";
+
+            }
+            else
+            {
+                timer1.Start();
+                button1.Text = "Stop";
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if(colorDialog1.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+            {
+                k = colorDialog1.Color; // zmiana koloru figury
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (rotacja == 1) rotacja = 2; // zmiana kierunku obrotu figury
+            else rotacja = 1;
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            //zmiana prędkości obrotu figury
+            trackBar1.Maximum = 100;
+            trackBar1.Minimum = 0;
+            int standard = 101;
+            timer1.Interval = standard - trackBar1.Value;
+        }
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void mojPanel1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            Punkt obserwator = Punkt.RFiTetaToXYZ(r, fi, teta);
+            T3d projektor = new T3d(obserwator, mojPanel1.ClientRectangle);
+
+            Punkt[] p = { new Punkt(0, 0, 1), new Punkt(1, 0, 0), new Punkt(0, 1, 0), new Punkt(-1, 0, 0), new Punkt(0, -1, 0) };
+            Point[] ep = new Point[5];
+
+            for (int i = 0; i < p.Length; i++) projektor.punkt_3d(out ep[i], p[i]);
+
+            Pen myPen = new Pen(k);
+            g.DrawLine(myPen, ep[1], ep[2]);
+            g.DrawLine(myPen, ep[2], ep[3]);
+            g.DrawLine(myPen, ep[3], ep[4]);
+            g.DrawLine(myPen, ep[4], ep[1]);
+
+            g.DrawLine(myPen, ep[1], ep[0]);
+            g.DrawLine(myPen, ep[2], ep[0]);
+            g.DrawLine(myPen, ep[3], ep[0]);
+            g.DrawLine(myPen, ep[4], ep[0]);
+        }
+    }
+}
